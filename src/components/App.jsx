@@ -1,12 +1,14 @@
 import "../reset.css";
 import "../App.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NoTodos from "./NoTodos";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
-
+import { Link } from "react-router-dom";
 
 function App() {
+  const [name, setName] = useState('');
+  const nameInputEl = useRef('');
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -28,7 +30,6 @@ function App() {
     },
   ]);
 
- 
   const [idForTodo, setIdForTodo] = useState(4);
 
   function addTodo(todo) {
@@ -118,9 +119,32 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    nameInputEl.current.focus();
+  }, []);
+
   return (
-    <div className="todo-app-container">
       <div className="todo-app">
+        <div className="name-container">
+          <h2>What is your name?</h2>
+          <button onClick={() => nameInputEl.current.focus()}>
+            Get Ref
+          </button>
+          <form action="#">
+            <input 
+              type="text" 
+              className="todo-input"
+              placeholder="Niraj Gurung"
+              ref={nameInputEl}
+              value={name}
+              onChange={event => setName(event.target.value)}
+            />
+          </form>
+          {name &&
+            <p className="name-label">Hello, {name}</p>
+          }
+        </div>
+
         <h2>To Do App</h2>
 
         <TodoForm addTodo={addTodo} />
@@ -141,7 +165,6 @@ function App() {
           <NoTodos />
         )}
       </div>
-    </div>
   );
 }
 
